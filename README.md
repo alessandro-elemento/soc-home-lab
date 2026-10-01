@@ -64,16 +64,11 @@ Every report follows the same investigative flow:
 
 ## Limitations
 
-- Techniques were simulated using Atomic Red Team's built-in test payloads, which are
-  intentionally simplified stand-ins for real malicious behavior (e.g., empty marker
-  files instead of functional malware).
-- The environment is a fully isolated, self-generated lab — there is no real adversary,
-  and no production data or network was involved.
-- Some techniques (e.g., process injection variants under T1055) were attempted but
-  abandoned when Windows Defender interference and the short-lived nature of the
-  injected process prevented reliable, methodologically honest evidence collection;
-  they are not included here rather than reported with gaps papered over.
-
+- Techniques were simulated using Atomic Red Team's built-in test payloads, which
+  are intentionally simplified stand-ins for real malicious behavior.
+- The environment is a fully isolated, self-generated lab — there is no real
+  adversary, and no production data or network was involved.
+  
 ## Repository Structure
 
 ```
