@@ -1,0 +1,27 @@
+# Atomic Red Team / tooling clones - not part of this portfolio's source
+AtomicRedTeam/
+atomics/
+
+# Splunk local configs / indexes (may contain host-specific or credential data)
+splunk/
+*.conf
+etc/apps/
+var/lib/splunk/
+
+# Credentials / secrets - never commit these
+*.env
+*credentials*
+*password*
+*.pfx
+*.pem
+*.key
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+
+# Raw baseline capture files generated during investigation (kept as
+# excerpts in the reports themselves, not as loose files in the repo)
+*baseline_before.txt
+*baseline_after.txt
