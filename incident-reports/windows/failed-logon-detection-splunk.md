@@ -1,9 +1,9 @@
-## Incident Report: Failed Logon Brute-Force Detection — SIEM Correlation & Alert Tuning
+## Incident Report: Failed Logon Brute-Force Detection: SIEM Correlation & Alert Tuning
 
 **Environment:** Windows 11 Home (ARM64, build 10.0.26200), isolated VirtualBox lab VM
 (Windows11-Victim)
 **Date:** 28 September 2026
-**Technique:** T1110.001 – Brute Force: Password Guessing (Credential Access)
+**Technique:** T1110.001: Brute Force -> Password Guessing (Credential Access)
 **Tool:** Splunk Enterprise 10.4.3 (build 4174a2deda5d)
 
 ### Summary
@@ -15,7 +15,7 @@ fixing a logic error in the original trigger condition.
 
 ### Technique
 
-T1110.001 – Brute Force: Password Guessing. Repeated failed authentication attempts
+T1110.001: Brute Force: Password Guessing. Repeated failed authentication attempts
 against a single account or host within a short window are a classic indicator of a
 password-guessing attack, and are a standard detection use case for a SIEM.
 
@@ -116,7 +116,7 @@ Source Port: 0
 
 **Logon Type 2** (Interactive) combined with a **Source Network Address of
 127.0.0.1** confirms these failed attempts originated from a local, interactive logon
-at the machine's own console — not a remote network-based attack (which would show
+at the machine's own console —> not a remote network-based attack (which would show
 Logon Type 3 and a real source IP). This distinction matters operationally: it means
 this specific burst reflects local, benign failed logons (the lab's own deliberately
 incorrect password entries) rather than an external brute-force attempt, even though
