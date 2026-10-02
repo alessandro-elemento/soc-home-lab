@@ -7,8 +7,8 @@
 ### Summary
 
 Captured and analyzed unencrypted HTTP traffic to demonstrate how plaintext protocols
-expose full request and response content — including headers that can reveal
-infrastructure details — to anyone able to observe network traffic.
+expose full request and response content: including headers that can reveal
+infrastructure details —> to anyone able to observe network traffic.
 
 ### Methodology
 

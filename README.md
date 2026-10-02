@@ -1,10 +1,10 @@
-# SOC Home Lab — Detection & Incident Response Portfolio
+# SOC Home Lab: Detection & Incident Response Portfolio
 
 This repository documents a self-built home security lab used to simulate real-world
 attacker techniques (mapped to MITRE ATT&CK), investigate them using the same tools a
 SOC analyst would use on the job, and write up the findings as genuine incident reports.
 
-The goal was not just to "run a tool and screenshot the output" — every report below
+The goal was not just to "run a tool and screenshot the output", every report below
 follows a discovery-first methodology: capture a system baseline, execute a simulated
 technique, capture a second baseline, and find the anomaly by **diffing the two** rather
 than searching for an artifact whose name or location was already known in advance.
@@ -13,8 +13,8 @@ than searching for an artifact whose name or location was already known in advan
 
 Two isolated VirtualBox VMs, fully documented in [`lab-setup/lab-overview.md`](lab-setup/lab-overview.md):
 
-- **Ubuntu-Victim** — Ubuntu Server 26.04.1 LTS (ARM64)
-- **Windows11-Victim** — Windows 11 Home (ARM64, build 10.0.26200)
+- **Ubuntu-Victim**: Ubuntu Server 26.04.1 LTS (ARM64)
+- **Windows11-Victim**: Windows 11 Home (ARM64, build 10.0.26200)
 
 Attacker techniques were simulated using [Invoke-AtomicRedTeam](https://github.com/redcanaryco/invoke-atomicredteam)
 (Atomic Red Team), and investigated using Wireshark, System Informer (Process Hacker),
@@ -35,18 +35,18 @@ Splunk Enterprise, and native OS tooling (PowerShell, `reg`, `schtasks`, `find`,
 
 Every report follows the same investigative flow:
 
-1. **Baseline** — capture the relevant system state (registry keys, SetUID files,
+1. **Baseline**: Capture the relevant system state (registry keys, SetUID files,
    scheduled tasks, event logs) *before* anything happens.
-2. **Simulate** — execute the Atomic Red Team test for the target technique.
-3. **Discover** — capture the same system state *after*, and diff the two baselines to
+2. **Simulate**: Execute the Atomic Red Team test for the target technique.
+3. **Discover**: Capture the same system state *after*, and diff the two baselines to
    surface what changed, without relying on already knowing the artifact's name.
-4. **Analyze** — evaluate the surfaced artifact on its own technical merits (location,
+4. **Analyze**: Evaluate the surfaced artifact on its own technical merits (location,
    ownership, permissions, referenced binary existence) to justify why it's suspicious.
-5. **Eradicate** — remove the artifact using the same manual commands a real analyst
+5. **Eradicate**: Remove the artifact using the same manual commands a real analyst
    would use against a real attacker (`reg delete`, `sudo rm`, `schtasks /delete`) —
    never the Atomic Red Team framework's own `-Cleanup` flag, since a genuine adversary's
    artifact wouldn't ship with a built-in removal tool.
-6. **Verify** — confirm removal and that the system has returned to its baseline state.
+6. **Verify**: Confirm removal and that the system has returned to its baseline state.
 
 ## Skills Demonstrated
 
@@ -67,16 +67,11 @@ Every report follows the same investigative flow:
 
 ## Limitations
 
-- Techniques were simulated using Atomic Red Team's built-in test payloads, which are
-  intentionally simplified stand-ins for real malicious behavior (e.g., empty marker
-  files instead of functional malware).
-- The environment is a fully isolated, self-generated lab — there is no real adversary,
-  and no production data or network was involved.
-- Some techniques (e.g., process injection variants under T1055) were attempted but
-  abandoned when Windows Defender interference and the short-lived nature of the
-  injected process prevented reliable, methodologically honest evidence collection;
-  they are not included here rather than reported with gaps papered over.
-
+- Techniques were simulated using Atomic Red Team's built-in test payloads, which
+  are intentionally simplified stand-ins for real malicious behavior.
+- The environment is a fully isolated, self-generated lab — there is no real
+  adversary, and no production data or network was involved.
+  
 ## Repository Structure
 
 ```
