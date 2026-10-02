@@ -61,6 +61,9 @@ Every report follows the same investigative flow:
 - Manual, real-world eradication and verification steps (registry, scheduled tasks,
   filesystem)
 - Multi-VM lab administration on Apple Silicon (ARM64-specific tooling constraints)
+- Basic Python scripting for log analysis (standard-library CSV parsing, threshold-based
+  detection logic independent of Splunk — see [`scripts/`](scripts/))
+- Version control with Git/GitHub (repository structure, commit history, remote push)
 
 ## Limitations
 
@@ -92,5 +95,8 @@ soc-home-lab/
 │       └── failed-logon-detection-splunk.md
 ├── detections/
 │   └── failed-logon-threshold.spl
+├── scripts/
+│   ├── analyze_failed_logons.py
+│   └── sample-4625-events.csv
 └── screenshots/
 ```

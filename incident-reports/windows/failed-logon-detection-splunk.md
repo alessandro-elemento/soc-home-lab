@@ -122,6 +122,28 @@ this specific burst reflects local, benign failed logons (the lab's own delibera
 incorrect password entries) rather than an external brute-force attempt, even though
 it still correctly exercised and validated the detection logic end-to-end.
 
+### Supplementary: Python Re-implementation
+
+To confirm the detection logic independent of Splunk, the same `count-by-host,
+flag-if-over-threshold` logic was re-implemented as a small standalone Python
+script: [`scripts/analyze_failed_logons.py`](../../scripts/analyze_failed_logons.py).
+It reads a CSV export of Event ID 4625 records, counts failed logons per host,
+and flags any host meeting the threshold — along with a Logon Type breakdown,
+to surface the same local-vs-remote distinction used above. Run against a
+sample CSV modelled on this lab's captured events
+([`scripts/sample-4625-events.csv`](../../scripts/sample-4625-events.csv)):
+
+```
+$ python3 scripts/analyze_failed_logons.py scripts/sample-4625-events.csv
+
+Loaded 4 failed logon event(s) from scripts/sample-4625-events.csv
+
+Hosts meeting or exceeding 3 failed logons:
+
+  Windows11-Victi: 4 failed logon attempt(s)
+      - 4x Interactive (local console logon)
+```
+
 ### Conclusion
 
 This exercise demonstrates building a working SIEM correlation search and alert from
