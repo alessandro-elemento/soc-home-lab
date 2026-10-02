@@ -18,7 +18,7 @@ the alert's detection logic outside of Splunk.
 
 It also reports the Logon Type breakdown per flagged host, since Logon Type
 2 (Interactive) with a Source Network Address of 127.0.0.1 indicates a local
-logon rather than a remote attack — the same distinction used in the
+logon rather than a remote attack, the same distinction used in the
 incident report to characterise the detected activity correctly.
 
 Usage:

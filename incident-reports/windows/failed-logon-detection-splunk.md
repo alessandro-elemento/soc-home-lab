@@ -1,16 +1,16 @@
-## Incident Report: Failed Logon Brute-Force Detection: SIEM Correlation & Alert Tuning
+## Incident Report: Failed Logon Brute-Force Detection - SIEM Correlation & Alert Tuning
 
 **Environment:** Windows 11 Home (ARM64, build 10.0.26200), isolated VirtualBox lab VM
 (Windows11-Victim)
 **Date:** 28 September 2026
-**Technique:** T1110.001: Brute Force -> Password Guessing (Credential Access)
+**Technique:** T1110.001: Brute Force - Password Guessing (Credential Access)
 **Tool:** Splunk Enterprise 10.4.3 (build 4174a2deda5d)
 
 ### Summary
 
 Built and tuned a real-time Splunk correlation search and alert to detect repeated
 failed logon attempts (Event ID 4625) on a Windows host, generated genuine failed
-logon events, and confirmed the alert fired correctly against real data — including
+logon events, and confirmed the alert fired correctly against real data, including
 fixing a logic error in the original trigger condition.
 
 ### Technique
@@ -43,18 +43,18 @@ index=* EventCode=4625 | stats count by ComputerName, host | where count >= 3
 ```
 
 This search only returns a result row once a given `ComputerName` has accumulated 3 or
-more failed logon events — the threshold is encoded directly in the search itself via
+more failed logon events: the threshold is encoded directly in the search itself via
 `where count >= 3`.
 
 ![Raw Event ID 4625 events in Splunk](../../screenshots/splunk-01-raw-4625-events.png)
 
-### Alert Tuning — Correcting a Logic Error
+### Alert Tuning: Correcting a Logic Error
 
 The alert was initially configured with a Trigger Condition of **"Number of Results is
 greater than 2."** This was incorrect: because the underlying search already filters
 down to only the rows meeting the 3-failure threshold (`where count >= 3`), the number
 of *results* returned is the number of distinct hosts/computers meeting that
-threshold — not the failure count itself. A trigger condition of "greater than 2"
+threshold, not the failure count itself. A trigger condition of "greater than 2"
 would require three or more **separate computers** to each independently accumulate 3+
 failures within the same search window before the alert would ever fire, which is
 unreachable in a single-host lab (and a much higher bar than intended in a
@@ -88,7 +88,7 @@ records, and the correlation search returned:
 ```
 ComputerName: Windows11-Victi    count: 3
 ```
-for the window 9:17:01 PM – 9:18:01 PM.
+for the window 9:17:01 PM to 9:18:01 PM.
 
 The alert's **Trigger History** confirmed a real fire:
 
@@ -116,7 +116,7 @@ Source Port: 0
 
 **Logon Type 2** (Interactive) combined with a **Source Network Address of
 127.0.0.1** confirms these failed attempts originated from a local, interactive logon
-at the machine's own console —> not a remote network-based attack (which would show
+at the machine's own console, not a remote network-based attack (which would show
 Logon Type 3 and a real source IP). This distinction matters operationally: it means
 this specific burst reflects local, benign failed logons (the lab's own deliberately
 incorrect password entries) rather than an external brute-force attempt, even though
@@ -128,7 +128,7 @@ To confirm the detection logic independent of Splunk, the same `count-by-host,
 flag-if-over-threshold` logic was re-implemented as a small standalone Python
 script: [`scripts/analyze_failed_logons.py`](../../scripts/analyze_failed_logons.py).
 It reads a CSV export of Event ID 4625 records, counts failed logons per host,
-and flags any host meeting the threshold — along with a Logon Type breakdown,
+and flags any host meeting the threshold, along with a Logon Type breakdown,
 to surface the same local-vs-remote distinction used above. Run against a
 sample CSV modelled on this lab's captured events
 ([`scripts/sample-4625-events.csv`](../../scripts/sample-4625-events.csv)):
@@ -150,5 +150,5 @@ This exercise demonstrates building a working SIEM correlation search and alert 
 raw Windows Security event data, identifying and correcting a logic error in the
 alert's trigger condition (distinguishing "number of results" from the threshold
 already encoded in the search), and using event log fields (Logon Type, Source Network
-Address) to correctly characterize the nature of the detected activity rather than
+Address) to correctly characterise the nature of the detected activity rather than
 assuming a worst-case interpretation.

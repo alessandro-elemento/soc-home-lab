@@ -6,9 +6,9 @@
 
 ### Summary
 
-Captured and analyzed unencrypted HTTP traffic to demonstrate how plaintext protocols
-expose full request and response content: including headers that can reveal
-infrastructure details —> to anyone able to observe network traffic.
+Captured and analysed unencrypted HTTP traffic to demonstrate how plaintext protocols
+expose full request and response content, including headers that can reveal
+infrastructure details, to anyone able to observe network traffic.
 
 ### Methodology
 
@@ -29,7 +29,7 @@ Wireshark's **Follow → HTTP Stream** feature.
 ### Findings
 
 The reconstructed stream showed the complete, human-readable HTTP request and
-response in cleartext — nothing was encrypted or obscured:
+response in cleartext, with nothing encrypted or obscured:
 
 - The full HTTP request line, headers (including `Host`, `User-Agent`, `Accept`), and
   method were visible exactly as sent.
@@ -45,13 +45,13 @@ response in cleartext — nothing was encrypted or obscured:
 
 Because HTTP traffic is unencrypted, anyone positioned to observe the traffic (a
 shared network, a compromised router, a malicious access point) can read requests and
-responses in full — including any credentials, session tokens, or sensitive data sent
+responses in full, including any credentials, session tokens, or sensitive data sent
 over HTTP rather than HTTPS. Response headers can also unintentionally disclose
 backend infrastructure information useful to an attacker performing reconnaissance.
 
 ### Conclusion
 
 This exercise demonstrates practical use of Wireshark's stream-following capability to
-reconstruct and analyze plaintext application-layer traffic, and highlights concrete,
-observable reasons why HTTPS (and minimizing informational response headers) matters
+reconstruct and analyse plaintext application-layer traffic, and highlights concrete,
+observable reasons why HTTPS (and minimising informational response headers) matters
 from a defensive standpoint.

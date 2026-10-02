@@ -2,7 +2,7 @@
 
 ## Hardware / Host
 
-- Apple Silicon Mac, VirtualBox for virtualization.
+- Apple Silicon Mac, VirtualBox for virtualisation.
 - Apple Silicon does **not** support running x86_64 Windows guests in VirtualBox, only
   ARM64 Windows or ARM64 Linux guests are supported. This directly shaped the VM choices
   below (Windows 11 **Home ARM64**, not the more commonly documented x64 build).
@@ -15,7 +15,7 @@
 - **Networking:** isolated VirtualBox internal/host-only network, no exposure to the
   host LAN beyond what's required for package installation
 - **Tools installed:**
-  - PowerShell (ARM64 tarball build -> the standard install script does not support
+  - PowerShell (ARM64 tarball build: the standard install script does not support
     ARM64, so the `.tar.gz` release was downloaded and extracted manually)
   - Invoke-AtomicRedTeam (PowerShell module) + Atomics folder, cloned to
     `/home/kal/AtomicRedTeam`
@@ -52,13 +52,13 @@ captures are meaningful.
   Windows VM instead of the Linux VM, and log collection was scoped to the Windows
   Security and System event logs.
 - Running `Invoke-AtomicTest` as root on Linux via `sudo` resolves `~` to `/root`, not
-  the invoking user's home directory -> the `-PathToAtomicsFolder` flag had to be passed
-  explicitly on every elevated run to avoid a "path does not exist" error.
+  the invoking user's home directory, so the `-PathToAtomicsFolder` flag had to be
+  passed explicitly on every elevated run to avoid a "path does not exist" error.
 
 ## Windows Defender Note
 
 Real-time protection was disabled at one point during testing (to allow a process
 injection technique to execute without being blocked) and was left off for the
 remainder of the lab sessions covered in this repository, since it has no bearing on
-the content of the reports below -> none of the finalised techniques here rely on
+the content of the reports below: none of the finalised techniques here rely on
 Defender being active or inactive.
