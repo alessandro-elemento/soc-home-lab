@@ -1,0 +1,4 @@
+fields @timestamp, ComputerName, TargetUserName, LogonType, SubStatus
+| filter EventCode = 4625
+| stats count(*) as failures by ComputerName
+| filter failures >= 3

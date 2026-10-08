@@ -1,0 +1,24 @@
+# Detection: Failed Logon Threshold (Brute Force / Password Guessing - T1110.001)
+#
+# Fires when a single host accumulates 3 or more failed logon events
+# (Windows Event ID 4625) within the search window.
+#
+# Data source: Local Event Log Collection Monitor input on the Windows
+# Security event log.
+#
+# Alert configuration (Save As Alert):
+#   Alert type:        Real-time
+#   Trigger Condition: Number of Results is greater than 0, in 1 minute
+#     (NOTE: the >=3 failure threshold is already encoded in the search
+#      below via `where count >= 3` -- the trigger condition only needs
+#      to fire on ANY result being returned, not on a count > 2/3.)
+#   Trigger:           For each result
+#   Throttle:          Enabled
+#     Suppress results containing field value: ComputerName
+#     Suppress triggering for:                 60 seconds
+#   Trigger Action:    Add to Triggered Alerts
+#   Severity:          Low
+
+index=* EventCode=4625
+| stats count by ComputerName, host
+| where count >= 3
