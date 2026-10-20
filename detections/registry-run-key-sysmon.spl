@@ -1,0 +1,2 @@
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1 Image="*\\reg.exe" CommandLine="*CurrentVersion\\Run*"
+| table _time, Image, CommandLine, ParentImage, User

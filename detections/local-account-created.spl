@@ -1,0 +1,2 @@
+index=* source="WinEventLog:Security" EventCode=4720
+| table _time, host, EventCode, Account_Name

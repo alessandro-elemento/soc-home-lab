@@ -18,7 +18,7 @@ Two isolated VirtualBox VMs, fully documented in [`lab-setup/lab-overview.md`](l
 
 Attacker techniques were simulated using [Invoke-AtomicRedTeam](https://github.com/redcanaryco/invoke-atomicredteam)
 (Atomic Red Team), and investigated using Wireshark, System Informer (Process Hacker),
-Splunk Enterprise, AWS CloudWatch Logs, and native OS tooling (PowerShell, `reg`,
+Splunk Enterprise, Sysmon, AWS CloudWatch Logs, and native OS tooling (PowerShell, `reg`,
 `schtasks`, `find`, `systemctl`).
 
 ## Incident Reports
@@ -32,6 +32,7 @@ Splunk Enterprise, AWS CloudWatch Logs, and native OS tooling (PowerShell, `reg`
 | T1053.005 | Persistence | Windows | PowerShell, `schtasks` | [Scheduled Task Persistence](incident-reports/windows/T1053.005-scheduled-task-persistence.md) |
 | T1110.001 | Credential Access | Windows | Splunk Enterprise, Event Viewer | [Failed Logon Brute-Force Detection](incident-reports/windows/failed-logon-detection-splunk.md) |
 | T1110.001 | Credential Access | Windows | AWS CloudWatch (Logs, Logs Insights, alarm), SNS, AWS CLI, PowerShell | [Failed Logon Detection on AWS CloudWatch](incident-reports/windows/failed-logon-detection-cloudwatch.md) |
+| T1136.001, T1547.001 | Persistence | Windows | Sysmon, Splunk Enterprise, Windows Security log | [Persistence Detection from Telemetry with Sysmon and Splunk](incident-reports/windows/sysmon-splunk-persistence-detection.md) |
 
 ## Methodology
 
@@ -58,7 +59,11 @@ Every report follows the same investigative flow:
 - Baseline-diff investigative methodology (as opposed to signature/IOC lookup)
 - SIEM log correlation and alert tuning in Splunk (Event ID 4625, `stats`/`where`
   threshold logic, real-time alerting, throttling/suppression)
-- Windows Security Event Log analysis (Logon Type, Source Network Address, failure codes)
+- Windows Security Event Log analysis (Logon Type, Source Network Address, failure codes,
+  account-management events)
+- Sysmon deployment on ARM64 Windows and detection from telemetry: process-chain
+  investigation, pivoting between Sysmon and Security logs, noise filtering, and a
+  scheduled Splunk alert for local account creation
 - Small-scale AWS experience: IAM user with a least-privilege policy and root MFA,
   shipping Windows security events to CloudWatch Logs with the AWS CLI on a schedule,
   querying them with Logs Insights, and alerting with a CloudWatch metric filter, alarm
@@ -98,10 +103,13 @@ soc-home-lab/
 │       ├── T1547.001-registry-run-key-persistence.md
 │       ├── T1053.005-scheduled-task-persistence.md
 │       ├── failed-logon-detection-splunk.md
-│       └── failed-logon-detection-cloudwatch.md
+│       ├── failed-logon-detection-cloudwatch.md
+│       └── sysmon-splunk-persistence-detection.md
 ├── detections/
 │   ├── failed-logon-threshold.spl
-│   └── failed-logon-threshold.logsinsights
+│   ├── failed-logon-threshold.logsinsights
+│   ├── local-account-created.spl
+│   └── registry-run-key-sysmon.spl
 ├── scripts/
 │   ├── analyze_failed_logons.py
 │   ├── sample-4625-events.csv
