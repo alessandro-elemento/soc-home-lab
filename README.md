@@ -4,10 +4,16 @@ This repository documents a self-built home security lab used to simulate real-w
 attacker techniques (mapped to MITRE ATT&CK), investigate them using the same tools a
 SOC analyst would use on the job, and write up the findings as genuine incident reports.
 
-The goal was not just to "run a tool and screenshot the output", every report below
-follows a discovery-first methodology: capture a system baseline, execute a simulated
-technique, capture a second baseline, and find the anomaly by **diffing the two** rather
-than searching for an artifact whose name or location was already known in advance.
+The goal was not just to "run a tool and screenshot the output". Every report is
+discovery-first, meaning the artefact is found rather than looked up by a name or location
+already known in advance, but there are two approaches:
+
+- **Baseline diff** (the four persistence and privilege escalation reports): capture a
+  system baseline, execute a simulated technique, capture a second baseline, and find the
+  anomaly by **diffing the two**.
+- **Telemetry first** (the Sysmon and Splunk report): collect logs continuously, run the
+  technique, then investigate from the logs alone, as a SOC would when nobody took a
+  snapshot beforehand.
 
 ## Lab Environment
 
@@ -36,7 +42,10 @@ Splunk Enterprise, Sysmon, AWS CloudWatch Logs, and native OS tooling (PowerShel
 
 ## Methodology
 
-Every report follows the same investigative flow:
+### Baseline-diff flow
+
+The Linux and Windows persistence and privilege escalation reports (T1548.001,
+T1053.006, T1547.001, T1053.005) follow this flow:
 
 1. **Baseline**: Capture the relevant system state (registry keys, SetUID files,
    scheduled tasks, event logs) *before* anything happens.
@@ -50,6 +59,26 @@ Every report follows the same investigative flow:
    the Atomic Red Team framework's own `-Cleanup` flag, since a genuine adversary's
    artifact wouldn't ship with a built-in removal tool.
 6. **Verify**: Confirm removal and that the system has returned to its baseline state.
+
+### Telemetry-first flow
+
+The [Sysmon and Splunk report](incident-reports/windows/sysmon-splunk-persistence-detection.md)
+works the other way round, because a SOC mostly starts from logs and alerts:
+
+1. **Collect**: Deploy Sysmon and send its events, with the Windows Security log, to
+   Splunk before anything happens.
+2. **Simulate**: Execute the Atomic Red Team test.
+3. **Investigate**: Start from a clue, search the telemetry, and pivot between log sources
+   (the Security log says what and who, Sysmon says how) to build a timeline.
+4. **Map**: Tie the finding to MITRE ATT&CK last.
+5. **Detect**: Turn the finding into a saved search or alert.
+6. **Clean up**: Remove the artefacts with Atomic Red Team's own `-Cleanup` flag and
+   verify. This is a deliberate difference from the baseline-diff reports: the focus here
+   was the detection, not the manual eradication.
+
+The failed-logon reports (Splunk and CloudWatch) and the Wireshark report analyse logs or
+traffic rather than a planted artefact, so they follow their own steps, described in each
+report.
 
 ## Skills Demonstrated
 
