@@ -39,6 +39,7 @@ Splunk Enterprise, Sysmon, AWS CloudWatch Logs, and native OS tooling (PowerShel
 | T1110.001 | Credential Access | Windows | Splunk Enterprise, Event Viewer | [Failed Logon Brute-Force Detection](incident-reports/windows/failed-logon-detection-splunk.md) |
 | T1110.001 | Credential Access | Windows | AWS CloudWatch (Logs, Logs Insights, alarm), SNS, AWS CLI, PowerShell | [Failed Logon Detection on AWS CloudWatch](incident-reports/windows/failed-logon-detection-cloudwatch.md) |
 | T1136.001, T1547.001 | Persistence | Windows | Sysmon, Splunk Enterprise, Windows Security log | [Persistence Detection from Telemetry with Sysmon and Splunk](incident-reports/windows/sysmon-splunk-persistence-detection.md) |
+| T1110.001 | Credential Access | Windows | CloudWatch Logs Insights export, Microsoft Excel (formulas, `XLOOKUP`, pivot tables, charts) | [Failed Logon Analysis in Excel](incident-reports/windows/failed-logon-excel-dashboard.md) |
 
 ## Methodology
 
@@ -97,6 +98,9 @@ report.
   shipping Windows security events to CloudWatch Logs with the AWS CLI on a schedule,
   querying them with Logs Insights, and alerting with a CloudWatch metric filter, alarm
   and SNS email notification
+- Presenting security data to non-technical readers: an Excel workbook with formulas, a
+  lookup table, pivot tables and a one-page summary built from exported log data; see
+  [`dashboards/`](dashboards/)
 - Network traffic analysis with Wireshark (HTTP stream reconstruction)
 - Manual, real-world eradication and verification steps (registry, scheduled tasks,
   filesystem)
@@ -133,7 +137,10 @@ soc-home-lab/
 │       ├── T1053.005-scheduled-task-persistence.md
 │       ├── failed-logon-detection-splunk.md
 │       ├── failed-logon-detection-cloudwatch.md
+│       ├── failed-logon-excel-dashboard.md
 │       └── sysmon-splunk-persistence-detection.md
+├── dashboards/
+│   └── failed-logon-dashboard.xlsx
 ├── detections/
 │   ├── failed-logon-threshold.spl
 │   ├── failed-logon-threshold.logsinsights
