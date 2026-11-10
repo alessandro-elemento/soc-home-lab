@@ -7,6 +7,8 @@
 **Tools:** CloudWatch Logs Insights (CSV export), Microsoft Excel (formulas, `XLOOKUP`,
 pivot tables, charts)
 **Workbook:** [`dashboards/failed-logon-dashboard.xlsx`](../../dashboards/failed-logon-dashboard.xlsx)
+**Methodology:** [`dashboards/README.md`](../../dashboards/README.md), covering every sheet,
+formula and design choice
 
 ### Summary
 
